@@ -1,7 +1,8 @@
 version: "3.8"
 services:
   postgres:
-    image: postgres:10.3
+    container_name: google-review-arcca
+    image: postgres
     restart: always
     environment:
       - POSTGRES_USER=postgres
