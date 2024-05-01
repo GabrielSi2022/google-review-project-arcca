@@ -7,3 +7,20 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+
+// model Business {
+//   id    Int     @default(autoincrement()) @id
+//   name  String?
+//   ratingTotal Decimal?
+//   business Business[]
+// }
+
+// model Reviews {
+//   id        Int     @default(autoincrement()) @id
+//   user     String
+//   content   String?
+//   rating   Decimal?
+//   author    User?   @relation(fields: [authorId], references: [id])
+// }
+
