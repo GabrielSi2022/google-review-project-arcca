@@ -37,6 +37,7 @@ model Review {
   approximateDate String  @map("approximate_date")
   text            String?
   answer           String?
+  published       Boolean  @default(false)
 
   createdAt DateTime  @default(now()) 
   updatedAt DateTime? @updatedAt 
