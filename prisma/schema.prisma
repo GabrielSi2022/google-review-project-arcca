@@ -22,8 +22,8 @@ model Business {
   linkMap    String
   linkReview String
 
-  createdAt DateTime?  @default(now()) 
-  updatedAt DateTime? @updatedAt 
+  createdAt DateTime  @default(now()) 
+  updatedAt DateTime @updatedAt 
 
   reviews Review[]
 
@@ -38,8 +38,8 @@ model Review {
   text            String?
   answer           String?
 
-  createdAt DateTime?  @default(now()) 
-  updatedAt DateTime? @updatedAt 
+  createdAt DateTime  @default(now()) 
+  updatedAt DateTime @updatedAt 
   
 
   
