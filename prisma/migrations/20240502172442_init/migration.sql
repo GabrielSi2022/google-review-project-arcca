@@ -4,7 +4,7 @@ CREATE TABLE "business" (
     "name" TEXT NOT NULL,
     "linkMap" TEXT NOT NULL,
     "linkReview" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3),
 
     CONSTRAINT "business_pkey" PRIMARY KEY ("id")
@@ -14,11 +14,10 @@ CREATE TABLE "business" (
 CREATE TABLE "reviews" (
     "id" TEXT NOT NULL,
     "rating" INTEGER NOT NULL,
-    "approximate_date" TEXT NOT NULL,
+    "approximateDate" TEXT NOT NULL,
     "text" TEXT,
     "answer" TEXT,
-    "published" BOOLEAN NOT NULL DEFAULT false,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3),
 
     CONSTRAINT "reviews_pkey" PRIMARY KEY ("id")

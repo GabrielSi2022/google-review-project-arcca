@@ -22,7 +22,7 @@ model Business {
   linkMap    String
   linkReview String
 
-  createdAt DateTime  @default(now()) 
+  createdAt DateTime?  @default(now()) 
   updatedAt DateTime? @updatedAt 
 
   reviews Review[]
@@ -34,12 +34,11 @@ model Business {
 model Review {
   id              String  @id @default(uuid())
   rating          Int
-  approximateDate String  @map("approximate_date")
+  approximateDate String  
   text            String?
   answer           String?
-  published       Boolean  @default(false)
 
-  createdAt DateTime  @default(now()) 
+  createdAt DateTime?  @default(now()) 
   updatedAt DateTime? @updatedAt 
   
 
