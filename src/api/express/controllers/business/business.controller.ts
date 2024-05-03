@@ -32,7 +32,7 @@ export class BusinessController {
       updatedAt: updatedAt,
     };
 
-    res.status(201).json(data).send();
+    res.status(201).json(data);
   }
 
   public async list(req: Request, res: Response) {
@@ -45,6 +45,6 @@ export class BusinessController {
       business: output.business,
     };
 
-    res.status(200).json(data).send();
+    res.status(200).json(data);
   }
 }
