@@ -1,7 +1,7 @@
 export type BusinessProps = {
-  name: string;
-  linkMap: string;
-  linkReview: string;
+  nameBusiness: string;
+  addressMap: string;
+  addressReview: string;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -9,41 +9,47 @@ export type BusinessProps = {
 export class Business {
   private constructor(readonly props: BusinessProps) {}
   public static create(
-    name: string,
-    linkMap: string,
-    linkReview: string,
-    createdAt: Date,
-    updatedAt: Date
-  ) {
-    return new Business({ name, linkMap, linkReview, createdAt, updatedAt });
-  }
-
-  public static with(
-    name: string,
-    linkMap: string,
-    linkReview: string,
+    nameBusiness: string,
+    addressMap: string,
+    addressReview: string,
     createdAt: Date,
     updatedAt: Date
   ) {
     return new Business({
-      name,
-      linkMap,
-      linkReview,
+      nameBusiness,
+      addressMap,
+      addressReview,
       createdAt,
       updatedAt,
     });
   }
 
-  public get name() {
-    return this.props.name;
+  public static with(
+    nameBusiness: string,
+    addressMap: string,
+    addressReview: string,
+    createdAt: Date,
+    updatedAt: Date
+  ) {
+    return new Business({
+      nameBusiness,
+      addressMap,
+      addressReview,
+      createdAt,
+      updatedAt,
+    });
   }
 
-  public get linkMap() {
-    return this.props.linkMap;
+  public get nameBusiness() {
+    return this.props.nameBusiness;
   }
 
-  public get linkReview() {
-    return this.props.linkReview;
+  public get addressMap() {
+    return this.props.addressMap;
+  }
+
+  public get addressReview() {
+    return this.props.addressReview;
   }
 
   public get createdAt() {

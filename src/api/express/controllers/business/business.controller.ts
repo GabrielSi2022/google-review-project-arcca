@@ -11,23 +11,24 @@ export class BusinessController {
   }
 
   public async create(req: Request, res: Response) {
-    const { name, linkMap, linkReview, createdAt, updatedAt } = req.body;
+    const { nameBusiness, addressMap, addressReview, createdAt, updatedAt } =
+      req.body;
 
     const aRepository = BusinessRepositoryPrisma.build(prisma);
     const aService = BusinessServiceImplementation.build(aRepository);
 
     const output = await aService.create(
-      name,
-      linkMap,
-      linkReview,
+      nameBusiness,
+      addressMap,
+      addressReview,
       createdAt,
       updatedAt
     );
 
     const data = {
-      name: name,
-      linkMap: linkMap,
-      linkReview: linkReview,
+      nameBusiness: nameBusiness,
+      addressMap: addressMap,
+      addressReview: addressReview,
       createdAt: createdAt,
       updatedAt: updatedAt,
     };

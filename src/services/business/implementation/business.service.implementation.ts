@@ -14,16 +14,16 @@ export class BusinessServiceImplementation implements BusinessService {
   }
 
   public async create(
-    name: string,
-    linkMap: string,
-    linkReview: string,
+    nameBusiness: string,
+    addressMap: string,
+    addressReview: string,
     createdAt: Date,
     updatedAt: Date
   ): Promise<CreateOutputDtoBusiness> {
     const aBusiness = Business.create(
-      name,
-      linkMap,
-      linkReview,
+      nameBusiness,
+      addressMap,
+      addressReview,
       createdAt,
       updatedAt
     );
@@ -31,9 +31,9 @@ export class BusinessServiceImplementation implements BusinessService {
 
     const output: CreateOutputDtoBusiness = {
       business: {
-        name: aBusiness.name,
-        linkMap: aBusiness.linkMap,
-        linkReview: aBusiness.linkReview,
+        nameBusiness: aBusiness.nameBusiness,
+        addressMap: aBusiness.addressMap,
+        addressReview: aBusiness.addressReview,
         createdAt: aBusiness.createdAt,
         updatedAt: aBusiness.updatedAt,
       },
@@ -46,9 +46,9 @@ export class BusinessServiceImplementation implements BusinessService {
 
     const business = aBusiness.map((b) => {
       return {
-        name: b.name,
-        linkMap: b.linkMap,
-        linkReview: b.linkReview,
+        nameBusiness: b.nameBusiness,
+        addressMap: b.addressMap,
+        addressReview: b.addressReview,
         createdAt: b.createdAt,
         updatedAt: b.updatedAt,
       };

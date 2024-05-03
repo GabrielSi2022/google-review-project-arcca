@@ -14,15 +14,15 @@ export class ReviewsServiceImplementation implements ReviewsService {
   }
 
   public async create(
-    rating: number,
-    approximatedDate: string,
+    classification: number,
+    date: Date,
     text: string,
     createdAt: Date,
     updatedAt: Date
   ): Promise<CreateOutputDtoReviews> {
     const aReviews = Reviews.create(
-      rating,
-      approximatedDate,
+      classification,
+      date,
       text,
       createdAt,
       updatedAt
@@ -31,8 +31,8 @@ export class ReviewsServiceImplementation implements ReviewsService {
 
     const output: CreateOutputDtoReviews = {
       reviews: {
-        rating: aReviews.rating,
-        approximatedDate: aReviews.approximatedDate,
+        classification: aReviews.classification,
+        date: aReviews.date,
         text: aReviews.text,
         createdAt: aReviews.createdAt,
         updatedAt: aReviews.updatedAt,
@@ -46,8 +46,8 @@ export class ReviewsServiceImplementation implements ReviewsService {
 
     const reviews = aReviews.map((r) => {
       return {
-        rating: r.rating,
-        approximatedDate: r.approximatedDate,
+        classification: r.classification,
+        date: r.date,
         text: r.text,
         createdAt: r.createdAt,
         updatedAt: r.updatedAt,

@@ -11,22 +11,22 @@ export class ReviewsController {
   }
 
   public async create(req: Request, res: Response) {
-    const { rating, approximatedDate, text, createdAt, updatedAt } = req.body;
+    const { classification, date, text, createdAt, updatedAt } = req.body;
 
     const aRepository = ReviewsRepositoryPrisma.build(prisma);
     const aService = ReviewsServiceImplementation.build(aRepository);
 
     const output = await aService.create(
-      rating,
-      approximatedDate,
+      classification,
+      date,
       text,
       createdAt,
       updatedAt
     );
 
     const data = {
-      rating: rating,
-      approximatedDate: approximatedDate,
+      classification: classification,
+      date: date,
       text: text,
       createdAt: createdAt,
       updatedAt: updatedAt,

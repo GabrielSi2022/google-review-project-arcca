@@ -1,7 +1,7 @@
 export type ListOutputDtoReviews = {
   reviews: {
-    rating: number;
-    approximatedDate: string;
+    classification: number;
+    date: Date;
     text: string;
     createdAt: Date;
     updatedAt: Date;
@@ -10,8 +10,8 @@ export type ListOutputDtoReviews = {
 
 export type CreateOutputDtoReviews = {
   reviews: {
-    rating: number;
-    approximatedDate: string;
+    classification: number;
+    date: Date;
     text: string;
     createdAt: Date;
     updatedAt: Date;
@@ -20,8 +20,8 @@ export type CreateOutputDtoReviews = {
 
 export interface ReviewsService {
   create(
-    rating: number,
-    approximatedDate: string,
+    classification: number,
+    date: Date,
     text: string,
     createdAt: Date,
     updatedAt: Date

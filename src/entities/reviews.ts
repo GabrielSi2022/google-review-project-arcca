@@ -1,6 +1,6 @@
 export type ReviewsProps = {
-  rating: number;
-  approximatedDate: string;
+  classification: number;
+  date: Date;
   text: string;
   createdAt: Date;
   updatedAt: Date;
@@ -9,15 +9,15 @@ export type ReviewsProps = {
 export class Reviews {
   private constructor(readonly props: ReviewsProps) {}
   public static create(
-    rating: number,
-    approximatedDate: string,
+    classification: number,
+    date: Date,
     text: string,
     createdAt: Date,
     updatedAt: Date
   ) {
     return new Reviews({
-      rating,
-      approximatedDate,
+      classification,
+      date,
       text,
       createdAt,
       updatedAt,
@@ -25,27 +25,27 @@ export class Reviews {
   }
 
   public static with(
-    rating: number,
-    approximatedDate: string,
+    classification: number,
+    date: Date,
     text: string,
     createdAt: Date,
     updatedAt: Date
   ) {
     return new Reviews({
-      rating,
-      approximatedDate,
+      classification,
+      date,
       text,
       createdAt,
       updatedAt,
     });
   }
 
-  public get rating() {
-    return this.props.rating;
+  public get classification() {
+    return this.props.classification;
   }
 
-  public get approximatedDate() {
-    return this.props.approximatedDate;
+  public get date() {
+    return this.props.date;
   }
 
   public get text() {

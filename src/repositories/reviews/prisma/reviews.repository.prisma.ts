@@ -11,8 +11,8 @@ export class ReviewsRepositoryPrisma implements ReviewsRepository {
 
   public async save(reviews: Reviews): Promise<void> {
     const data = {
-      rating: reviews.rating,
-      approximatedDate: reviews.approximatedDate,
+      classification: reviews.classification,
+      date: reviews.date,
       text: reviews.text,
       createdAt: reviews.createdAt,
       updatedAt: reviews.updatedAt,
@@ -25,8 +25,8 @@ export class ReviewsRepositoryPrisma implements ReviewsRepository {
     const aReviews = await this.prisma.review.findMany();
 
     const reviews: Reviews[] = aReviews.map((r) => {
-      const { rating, approximatedDate, text, createdAt, updatedAt } = r;
-      return Reviews.with(rating, approximatedDate, text, createdAt, updatedAt);
+      const { classification, date, text, createdAt, updatedAt } = r;
+      return Reviews.with(classification, date, text, createdAt, updatedAt);
     });
 
     return reviews;

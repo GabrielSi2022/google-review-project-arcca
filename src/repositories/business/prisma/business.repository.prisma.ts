@@ -11,9 +11,9 @@ export class BusinessRepositoryPrisma implements BusinessRepository {
 
   public async save(business: Business): Promise<void> {
     const data = {
-      name: business.name,
-      linkMap: business.linkMap,
-      linkReview: business.linkReview,
+      nameBusiness: business.nameBusiness,
+      addressMap: business.addressMap,
+      addressReview: business.addressReview,
       createdAt: business.createdAt,
       updatedAt: business.updatedAt,
     };
@@ -25,8 +25,15 @@ export class BusinessRepositoryPrisma implements BusinessRepository {
     const aBusiness = await this.prisma.business.findMany();
 
     const business: Business[] = aBusiness.map((b) => {
-      const { name, linkMap, linkReview, createdAt, updatedAt } = b;
-      return Business.with(name, linkMap, linkReview, createdAt, updatedAt);
+      const { nameBusiness, addressMap, addressReview, createdAt, updatedAt } =
+        b;
+      return Business.with(
+        nameBusiness,
+        addressMap,
+        addressReview,
+        createdAt,
+        updatedAt
+      );
     });
 
     return business;
