@@ -14,8 +14,8 @@ CREATE TABLE "business" (
 CREATE TABLE "reviews" (
     "id" TEXT NOT NULL,
     "rating" INTEGER NOT NULL,
-    "approximateDate" TEXT NOT NULL,
-    "text" TEXT,
+    "approximatedDate" TEXT NOT NULL,
+    "text" TEXT NOT NULL,
     "answer" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,

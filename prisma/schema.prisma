@@ -34,8 +34,8 @@ model Business {
 model Review {
   id              String  @id @default(uuid())
   rating          Int
-  approximateDate String  
-  text            String?
+  approximatedDate String  
+  text            String
   answer           String?
 
   createdAt DateTime  @default(now()) 
