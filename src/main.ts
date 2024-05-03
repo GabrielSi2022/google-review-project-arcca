@@ -8,9 +8,9 @@ function main() {
   const controllerBusiness = BusinessController.build();
   const controllerReviews = ReviewsController.build();
   api.addGetRoute("/business", controllerBusiness.list);
-  api.addPostRoute("/createBusiness", controllerBusiness.create);
+  api.addPostRoute("/business/create", controllerBusiness.create);
   api.addGetRoute("/reviews", controllerReviews.list);
-  api.addPostRoute("/createReview", controllerReviews.create);
+  api.addPostRoute("/reviews/create", controllerReviews.create);
   api.start(3000);
 }
 
