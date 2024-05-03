@@ -17,10 +17,10 @@ datasource db {
 
 
 model Business {
-  id         String   @id @default(uuid())
-  name       String
-  linkMap    String
-  linkReview String
+  id String   @id @default(uuid())
+  nameBusiness String
+  addressMap String
+  addressReview  String
 
   createdAt DateTime  @default(now()) 
   updatedAt DateTime @updatedAt 
@@ -32,11 +32,11 @@ model Business {
 
 
 model Review {
-  id              String  @id @default(uuid())
-  rating          Int
-  approximatedDate String  
-  text            String
-  answer           String?
+  id String  @id @default(uuid())
+  classification Int
+  date DateTime @default(dbgenerated("now()"))
+  text String
+  answer String?
 
   createdAt DateTime  @default(now()) 
   updatedAt DateTime @updatedAt 

@@ -1,9 +1,9 @@
 -- CreateTable
 CREATE TABLE "business" (
     "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "linkMap" TEXT NOT NULL,
-    "linkReview" TEXT NOT NULL,
+    "nameBusiness" TEXT NOT NULL,
+    "addressMap" TEXT NOT NULL,
+    "addressReview" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -13,8 +13,8 @@ CREATE TABLE "business" (
 -- CreateTable
 CREATE TABLE "reviews" (
     "id" TEXT NOT NULL,
-    "rating" INTEGER NOT NULL,
-    "approximatedDate" TEXT NOT NULL,
+    "classification" INTEGER NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL DEFAULT now(),
     "text" TEXT NOT NULL,
     "answer" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
