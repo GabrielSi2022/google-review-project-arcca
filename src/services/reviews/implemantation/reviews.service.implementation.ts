@@ -1,9 +1,44 @@
+import { Reviews } from "../../../entities/reviews";
 import { ReviewsRepository } from "../../../repositories/reviews/reviews.repository";
-import { ListOutputDtoReviews, ReviewsService } from "../reviews.service";
+import {
+  CreateOutputDtoReviews,
+  ListOutputDtoReviews,
+  ReviewsService,
+} from "../reviews.service";
 
 export class ReviewsServiceImplementation implements ReviewsService {
-  private constructor(readonly repository: ReviewsRepository) {
+  constructor(private readonly repository: ReviewsRepository) {}
+
+  public static build(repository: ReviewsRepository) {
     return new ReviewsServiceImplementation(repository);
+  }
+
+  public async create(
+    rating: number,
+    approximatedDate: string,
+    text: string,
+    createdAt: Date,
+    updatedAt: Date
+  ): Promise<CreateOutputDtoReviews> {
+    const aReviews = Reviews.create(
+      rating,
+      approximatedDate,
+      text,
+      createdAt,
+      updatedAt
+    );
+    await this.repository.save(aReviews);
+
+    const output: CreateOutputDtoReviews = {
+      reviews: {
+        rating: aReviews.rating,
+        approximatedDate: aReviews.approximatedDate,
+        text: aReviews.text,
+        createdAt: aReviews.createdAt,
+        updatedAt: aReviews.updatedAt,
+      },
+    };
+    return output;
   }
 
   public async list(): Promise<ListOutputDtoReviews> {
@@ -20,7 +55,7 @@ export class ReviewsServiceImplementation implements ReviewsService {
     });
 
     const output: ListOutputDtoReviews = {
-      reviews: aReviews,
+      reviews: reviews,
     };
 
     return output;
