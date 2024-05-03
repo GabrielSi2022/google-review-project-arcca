@@ -7,7 +7,7 @@ import {
 } from "../business.service";
 
 export class BusinessServiceImplementation implements BusinessService {
-  private constructor(readonly repository: BusinessRepository) {}
+  constructor(private readonly repository: BusinessRepository) {}
 
   public static build(repository: BusinessRepository) {
     return new BusinessServiceImplementation(repository);
@@ -30,11 +30,13 @@ export class BusinessServiceImplementation implements BusinessService {
     await this.repository.save(aBusiness);
 
     const output: CreateOutputDtoBusiness = {
-      name: aBusiness.name,
-      linkMap: aBusiness.linkMap,
-      linkReview: aBusiness.linkReview,
-      createdAt: aBusiness.createdAt,
-      updatedAt: aBusiness.updatedAt,
+      business: {
+        name: aBusiness.name,
+        linkMap: aBusiness.linkMap,
+        linkReview: aBusiness.linkReview,
+        createdAt: aBusiness.createdAt,
+        updatedAt: aBusiness.updatedAt,
+      },
     };
     return output;
   }
@@ -53,7 +55,7 @@ export class BusinessServiceImplementation implements BusinessService {
     });
 
     const output: ListOutputDtoBusiness = {
-      business: aBusiness,
+      business: business,
     };
 
     return output;

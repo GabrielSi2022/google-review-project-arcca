@@ -15,7 +15,7 @@ export type CreateOutputDtoBusiness = {
     linkReview: string;
     createdAt: Date;
     updatedAt: Date;
-  }[];
+  };
 };
 
 export interface BusinessService {

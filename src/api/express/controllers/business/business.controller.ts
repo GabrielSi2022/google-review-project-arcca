@@ -25,11 +25,11 @@ export class BusinessController {
     );
 
     const data = {
-      name: output.name,
-      linkMap: output.linkMap,
-      linkReview: output.linkReview,
-      createdAt: output.createdAt,
-      updatedAt: output.updatedAt,
+      name: name,
+      linkMap: linkMap,
+      linkReview: linkReview,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
     };
 
     res.status(201).json(data).send();
