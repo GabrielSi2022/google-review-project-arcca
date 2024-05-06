@@ -30,6 +30,8 @@ async function fetchReviews(storeNumber: number): Promise<any[]> {
     for (const reviewUnit of reviewArray) {
       const review = {
         classification: reviewUnit[0][2][0][0],
+        userId: reviewUnit[0][1][4][0][13],
+        userName: reviewUnit[0][1][4][0][4],
         text: reviewUnit[0][2][15]
           ? reviewUnit[0][2][15][0][0].replace(/\n$/g, "").replace(/\n/g, " ")
           : null,
@@ -88,13 +90,13 @@ async function postReviews(reviews: Reviews) {
 }
 
 async function main() {
-  const storeNumber = 0; // Número da loja desejada
+  const storeNumber = 1; // Número da loja desejada
   const reviews = await fetchReviews(storeNumber);
 
   console.log(reviews);
-  for (const review of reviews) {
-    await postReviews(review);
-  }
+  // for (const review of reviews) {
+  //   await postReviews(review);
+  // }
 }
 
 main();
