@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Reviews } from "../../entities/reviews";
 
 async function fetchReviews(storeNumber: number): Promise<any[]> {
   const query = findQueryByStoreNumber(storeNumber);
@@ -66,14 +67,14 @@ function parseResponse(jsonString: string): any[] {
 
 function findQueryByStoreNumber(storeNumber: number): string {
   const storeUrls: Record<number, string> = {
-    0: "https://www.google.com/maps/rpc/listugcposts?authuser=0&hl=en&gl=br&pb=!1m7!1s0x74fd59ec2fcc94d%3A0x3e3a1e157cd365d4!3s!6m4!4m1!1e1!4m1!1e3!2m2!1i10!2s!5m2!1s7MnvZeKSBtGU5OUP7sK5sA0!7e81!8m5!1b1!2b1!3b1!5b1!7b1!11m6!1e3!2e1!3sen!4sbr!6m1!1i2!13m1!1e2",
+    0: "https://www.google.com.br/maps/rpc/listugcposts?authuser=0&hl=pt-BR&gl=br&pb=!1m8!1s0x94b64399cc827d1d%3A0xcfd43c9cb0e9088c!3s!6m4!4m1!1e1!4m1!1e3!9b0!2m2!1i10!2sCAESdkNBRVFGQnBTUTJkblNVRm9TVUZIUVVWcFFVRnZlRU5CUlZOTFVXOUxRVVF0WDNremIxbEpabDlmWDNoSlVVMURjbU5GU0RVMU9EWkhlbU5JVDFkQlFVRkJRVUp2U2w5bGRWRkJiMWxGYmxOMWFVZEJRV2xCUVE%3D!5m2!1soMA4ZryrBdHe1sQPiJ6PiA0!7e81!8m5!1b1!2b1!3b1!5b1!7b1!11m6!1e3!2e1!3spt-BR!4sbr!6m1!1i2!13m1!1e1",
     1: "https://www.google.com/maps/rpc/listugcposts?authuser=0&hl=en&gl=br&pb=!1m7!1s0x9bd5b81cec9b05%3A0xc9b595f28b3ca216!3s!6m4!4m1!1e1!4m1!1e3!2m2!1i10!2s!5m2!1snLfvZYyyCoHS1sQPxZSTiAw!7e81!8m5!1b1!2b1!3b1!5b1!7b1!11m6!1e3!2e1!3sen!4sbr!6m1!1i2!13m1!1e2",
   };
 
   return storeUrls[storeNumber] || "";
 }
 
-async function postReviews(reviews: any[]) {
+async function postReviews(reviews: Reviews) {
   try {
     // Faz uma solicitação POST para enviar as revisões coletadas para o servidor
     const response = await axios.post(
