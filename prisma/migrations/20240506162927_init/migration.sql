@@ -19,24 +19,23 @@ CREATE TABLE "reviews" (
     "answer" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "businessId" TEXT,
+    "userReviewsId" TEXT,
 
     CONSTRAINT "reviews_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "_BusinessToReview" (
-    "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL
+CREATE TABLE "userReview" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "imgUrl" TEXT NOT NULL,
+
+    CONSTRAINT "userReview_pkey" PRIMARY KEY ("id")
 );
 
--- CreateIndex
-CREATE UNIQUE INDEX "_BusinessToReview_AB_unique" ON "_BusinessToReview"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_BusinessToReview_B_index" ON "_BusinessToReview"("B");
+-- AddForeignKey
+ALTER TABLE "reviews" ADD CONSTRAINT "reviews_businessId_fkey" FOREIGN KEY ("businessId") REFERENCES "business"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_BusinessToReview" ADD CONSTRAINT "_BusinessToReview_A_fkey" FOREIGN KEY ("A") REFERENCES "business"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_BusinessToReview" ADD CONSTRAINT "_BusinessToReview_B_fkey" FOREIGN KEY ("B") REFERENCES "reviews"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "reviews" ADD CONSTRAINT "reviews_userReviewsId_fkey" FOREIGN KEY ("userReviewsId") REFERENCES "userReview"("id") ON DELETE SET NULL ON UPDATE CASCADE;

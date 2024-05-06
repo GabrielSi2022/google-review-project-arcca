@@ -4,8 +4,6 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
-
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -15,35 +13,43 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model Business {
-  id String   @id @default(uuid())
-  nameBusiness String
-  addressMap String
-  addressReview  String
+  id            String @id @default(uuid())
+  nameBusiness  String
+  addressMap    String
+  addressReview String
 
-  createdAt DateTime  @default(now()) 
-  updatedAt DateTime @updatedAt 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   reviews Review[]
 
   @@map("business")
 }
 
-
 model Review {
-  id String  @id @default(uuid())
+  id             String   @id @default(uuid())
   classification Int
-  date DateTime @default(dbgenerated("now()"))
-  text String
-  answer String?
+  date           DateTime @default(dbgenerated("now()"))
+  text           String
+  answer         String?
 
-  createdAt DateTime  @default(now()) 
-  updatedAt DateTime @updatedAt 
-  
-
-  
-  business Business[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  Business     Business?   @relation(fields: [businessId], references: [id])
+  businessId   String?
+  userReviews   userReviews? @relation(fields: [userReviewsId], references: [id])
+  userReviewsId String?
 
   @@map("reviews")
+}
+
+model userReviews {
+  id     String @id
+  name   String
+  imgUrl String
+
+  userReviews Review[]
+
+  @@map("userReview")
 }
