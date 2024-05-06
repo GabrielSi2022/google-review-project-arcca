@@ -1,5 +1,5 @@
 import { ReviewsRepositoryPrisma } from "../../../../repositories/reviews/prisma/reviews.repository.prisma";
-import { ReviewsServiceImplementation } from "../../../../services/reviews/implemantation/reviews.service.implementation";
+import { ReviewsServiceImplementation } from "../../../../services/reviews/implementation/reviews.service.implementation";
 import { prisma } from "../../../../util/prisma.util";
 import { Request, Response } from "express";
 
