@@ -9,55 +9,56 @@ import {
 export class BusinessServiceImplementation implements BusinessService {
   constructor(private readonly repository: BusinessRepository) {}
 
-  public static build(repository: BusinessRepository) {
+  static build(repository: BusinessRepository): BusinessServiceImplementation {
     return new BusinessServiceImplementation(repository);
   }
 
-  public async create(
+  async create(
     nameBusiness: string,
     addressMap: string,
     addressReview: string,
     createdAt: Date,
     updatedAt: Date
   ): Promise<CreateOutputDtoBusiness> {
-    const aBusiness = Business.create(
-      nameBusiness,
-      addressMap,
-      addressReview,
-      createdAt,
-      updatedAt
-    );
-    await this.repository.save(aBusiness);
+    try {
+      const aBusiness = Business.create(
+        nameBusiness,
+        addressMap,
+        addressReview,
+        createdAt,
+        updatedAt
+      );
+      await this.repository.save(aBusiness);
 
-    const output: CreateOutputDtoBusiness = {
-      business: {
-        nameBusiness: aBusiness.nameBusiness,
-        addressMap: aBusiness.addressMap,
-        addressReview: aBusiness.addressReview,
-        createdAt: aBusiness.createdAt,
-        updatedAt: aBusiness.updatedAt,
-      },
-    };
-    return output;
+      return {
+        business: {
+          nameBusiness: aBusiness.nameBusiness,
+          addressMap: aBusiness.addressMap,
+          addressReview: aBusiness.addressReview,
+          createdAt: aBusiness.createdAt,
+          updatedAt: aBusiness.updatedAt,
+        },
+      };
+    } catch (error: any) {
+      throw new Error(`Falha ao criar a empresa: ${error.message}`);
+    }
   }
 
-  public async list(): Promise<ListOutputDtoBusiness> {
-    const aBusiness = await this.repository.list();
+  async list(): Promise<ListOutputDtoBusiness> {
+    try {
+      const aBusiness = await this.repository.list();
 
-    const business = aBusiness.map((b) => {
-      return {
+      const business = aBusiness.map((b) => ({
         nameBusiness: b.nameBusiness,
         addressMap: b.addressMap,
         addressReview: b.addressReview,
         createdAt: b.createdAt,
         updatedAt: b.updatedAt,
-      };
-    });
+      }));
 
-    const output: ListOutputDtoBusiness = {
-      business: business,
-    };
-
-    return output;
+      return { business };
+    } catch (error: any) {
+      throw new Error(`Falha ao listar a empresa: ${error.message}`);
+    }
   }
 }

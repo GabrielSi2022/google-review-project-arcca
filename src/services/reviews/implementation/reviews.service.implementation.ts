@@ -9,55 +9,63 @@ import {
 export class ReviewsServiceImplementation implements ReviewsService {
   constructor(private readonly repository: ReviewsRepository) {}
 
-  public static build(repository: ReviewsRepository) {
+  static build(repository: ReviewsRepository): ReviewsServiceImplementation {
     return new ReviewsServiceImplementation(repository);
   }
 
-  public async create(
+  async create(
     classification: number,
     date: Date,
     text: string,
+    answer: string,
     createdAt: Date,
     updatedAt: Date
   ): Promise<CreateOutputDtoReviews> {
-    const aReviews = Reviews.create(
-      classification,
-      date,
-      (text = text || ""),
-      (createdAt = new Date()),
-      (updatedAt = new Date())
-    );
-    await this.repository.save(aReviews);
+    try {
+      const review = Reviews.create(
+        classification,
+        date,
+        text || "",
+        answer || "",
+        createdAt || new Date(),
+        updatedAt || new Date()
+      );
 
-    const output: CreateOutputDtoReviews = {
-      reviews: {
-        classification: aReviews.classification,
-        date: aReviews.date,
-        text: aReviews.text,
-        createdAt: aReviews.createdAt,
-        updatedAt: aReviews.updatedAt,
-      },
-    };
-    return output;
+      await this.repository.save(review);
+
+      return {
+        reviews: {
+          classification: review.classification,
+          date: review.date,
+          text: review.text,
+          answer: review.answer,
+          createdAt: review.createdAt,
+          updatedAt: review.updatedAt,
+        },
+      };
+    } catch (error: any) {
+      throw new Error(`Falha ao criar o review: ${error.message}`);
+    }
   }
 
-  public async list(): Promise<ListOutputDtoReviews> {
-    const aReviews = await this.repository.list();
+  async list(): Promise<ListOutputDtoReviews> {
+    try {
+      const reviews = await this.repository.list();
 
-    const reviews = aReviews.map((r) => {
-      return {
-        classification: r.classification,
-        date: r.date,
-        text: r.text,
-        createdAt: r.createdAt,
-        updatedAt: r.updatedAt,
+      const output: ListOutputDtoReviews = {
+        reviews: reviews.map((review) => ({
+          classification: review.classification,
+          date: review.date,
+          text: review.text,
+          answer: review.answer,
+          createdAt: review.createdAt,
+          updatedAt: review.updatedAt,
+        })),
       };
-    });
 
-    const output: ListOutputDtoReviews = {
-      reviews: reviews,
-    };
-
-    return output;
+      return output;
+    } catch (error: any) {
+      throw new Error(`Falha ao listar os reviews: ${error.message}`);
+    }
   }
 }

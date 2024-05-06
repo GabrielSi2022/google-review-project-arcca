@@ -1,7 +1,7 @@
+import { Request, Response } from "express";
 import { ReviewsRepositoryPrisma } from "../../../../repositories/reviews/prisma/reviews.repository.prisma";
 import { ReviewsServiceImplementation } from "../../../../services/reviews/implementation/reviews.service.implementation";
 import { prisma } from "../../../../util/prisma.util";
-import { Request, Response } from "express";
 
 export class ReviewsController {
   private constructor() {}
@@ -11,40 +11,39 @@ export class ReviewsController {
   }
 
   public async create(req: Request, res: Response) {
-    const { classification, date, text, createdAt, updatedAt } = req.body;
+    const { classification, date, text, answer, createdAt, updatedAt } =
+      req.body;
 
-    const aRepository = ReviewsRepositoryPrisma.build(prisma);
-    const aService = ReviewsServiceImplementation.build(aRepository);
+    const repository = ReviewsRepositoryPrisma.build(prisma);
+    const service = ReviewsServiceImplementation.build(repository);
 
-    const output = await aService.create(
+    const output = await service.create(
       classification,
       date,
       text,
+      answer,
       createdAt,
       updatedAt
     );
 
-    const data = {
-      classification: classification,
-      date: date,
-      text: text,
-      createdAt: createdAt,
-      updatedAt: updatedAt,
+    const responseData = {
+      classification,
+      date,
+      text,
+      answer,
+      createdAt,
+      updatedAt,
     };
-
-    res.status(201).json(data);
+    res.status(201).json(responseData);
   }
 
   public async list(req: Request, res: Response) {
-    const aRepository = ReviewsRepositoryPrisma.build(prisma);
-    const aService = ReviewsServiceImplementation.build(aRepository);
+    const repository = ReviewsRepositoryPrisma.build(prisma);
+    const service = ReviewsServiceImplementation.build(repository);
 
-    const output = await aService.list();
+    const output = await service.list();
 
-    const data = {
-      reviews: output.reviews,
-    };
-
-    res.status(200).json(data);
+    const responseData = { reviews: output.reviews };
+    res.status(200).json(responseData);
   }
 }

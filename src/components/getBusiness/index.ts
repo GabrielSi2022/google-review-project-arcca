@@ -1,96 +1,86 @@
-// import puppeteer, { Page } from "puppeteer";
-// import { getReviewsByUrl } from "../getReviews";
+// import axios, { AxiosResponse } from "axios";
+// import { Reviews } from "../../entities/reviews";
 
-// async function waitForSelectorWithDelay(
-//   page: Page,
-//   selector: string,
-//   timeout: number = 1000
-// ) {
+// interface Review {
+//   classification: number;
+//   userId: string;
+//   userName: string;
+//   text: string | null;
+//   answer: string | null;
+// }
+
+// async function fetchReviews(storeIdentifier: number): Promise<Review[]> {
+//   const query = findQueryByStoreIdentifier(storeIdentifier);
+//   let paginationToken: string | null = null;
+//   const reviews: Review[] = [];
+
 //   try {
-//     await page.waitForSelector(selector, { timeout });
-//     await new Promise((resolve) => setTimeout(resolve, timeout)); // Aguarda um tempo adicional após o carregamento do seletor
+//     let remainingPages = 3;
+//     do {
+//       const paginatedQuery = insertTokenIntoQuery(query, paginationToken);
+//       const response = await axios.get(paginatedQuery);
+//       const structuredResponse = parseResponse(response.data);
+//       if (structuredResponse.length === 0) break;
+//       reviews.push(...extractReviews(structuredResponse));
+//       paginationToken =
+//         structuredResponse[structuredResponse.length - 1].paginationToken;
+//       remainingPages--;
+//     } while (remainingPages > 0 && paginationToken !== null);
+
+//     return reviews;
 //   } catch (error) {
-//     throw new Error(`Timeout ao aguardar o seletor: ${selector}`);
+//     console.error("Erro ao buscar reviews:", error);
+//     return [];
 //   }
 // }
 
-// async function clickAndWait(page: Page, selector: string) {
-//   await waitForSelectorWithDelay(page, selector);
-//   await page.click(selector);
+// function insertTokenIntoQuery(
+//   originalQuery: string,
+//   token: string | null
+// ): string {
+//   return token ? originalQuery.replace(/(!2s)/, `$1${token}`) : originalQuery;
 // }
 
-// async function scrollReviews(page: Page) {
-//   const selector = 'div[jslog^="26354"]';
-//   await waitForSelectorWithDelay(page, selector);
-//   await page.evaluate(() => {
-//     const reviews = document.querySelector('div[jslog^="26354"]');
-//     if (reviews) reviews.scrollTo(0, 5000);
-//   });
+// function parseResponse(response: any): any[] {
+//   const cleanedJson = response.replace(/^\)\]\}\'/, "");
+//   return JSON.parse(cleanedJson);
 // }
 
-// interface IMap {
-//   id: string;
-//   name: string;
-//   link: string | null;
-// }
-
-// export async function getEstablishment(url: string): Promise<IMap | null> {
-//   try {
-//     console.log("Iniciou a procura do estabelecimento pelo link: ", url);
-//     let urlLink: string | null = null;
-//     const urlLinks: string[] = [];
-//     const browser = await puppeteer.launch({ headless: true });
-//     const page = await browser.newPage();
-//     await page.setViewport({ width: 900, height: 1800 });
-//     await page.goto(url);
-//     await page.waitForNavigation();
-
-//     page.on("response", async (response) => {
-//       const urlResponse = response.url();
-//       urlLinks.push(urlResponse);
-//     });
-
-//     await clickAndWait(page, 'button[jslog^="145620"]');
-//     await page.waitForNavigation();
-//     await clickAndWait(page, 'button[jslog^="59550"]');
-//     await clickAndWait(page, 'div[vet^="25740"]');
-//     await page.waitForNavigation();
-
-//     await scrollReviews(page);
-//     await scrollReviews(page);
-//     await scrollReviews(page);
-
-//     const appInitializationState = await page.evaluate(
-//       // eslint-disable-next-line dot-notation
-//       () => window["APP_INITIALIZATION_STATE"]
-//     );
-//     const business = appInitializationState?.[5]?.[3]?.[2];
-//     const id = business?.[0] ?? "";
-//     const name = business?.[1] ?? "";
-
-//     console.log("APP_INITIALIZATION_STATE:", { id, name });
-
-//     await browser.close();
-
-//     for (const link of urlLinks) {
-//       if (link.includes("listugcposts")) {
-//         const { reviews } = await getReviewsByUrl(link);
-//         if (reviews && reviews.length > 0) {
-//           console.log(link);
-//           urlLink = link;
-
-//           break;
-//         }
-//       }
+// function extractReviews(response: any[]): Review[] {
+//   const reviews: Review[] = [];
+//   for (const responseUnit of response) {
+//     const reviewArray = responseUnit[2];
+//     for (const reviewUnit of reviewArray) {
+//       const [classificationData, userData, textData, answerData] = reviewUnit;
+//       const review: Review = {
+//         classification: classificationData[0][2][0][0],
+//         userId: userData[0][1][4][0][13],
+//         userName: userData[0][1][4][0][4],
+//         text:
+//           textData?.[0]?.[0]?.replace(/\n$/g, "").replace(/\n/g, " ") || null,
+//         answer:
+//           answerData?.[0]?.[0]?.replace(/\n$/g, "").replace(/\n/g, " ") || null,
+//       };
+//       reviews.push(review);
 //     }
-
-//     const establishment = { id, name, link: urlLink };
-
-//     console.log(establishment);
-
-//     return establishment;
-//   } catch (error) {
-//     console.error("Ocorreu um erro:", error);
-//     return null;
 //   }
+//   return reviews;
 // }
+
+// function findQueryByStoreIdentifier(storeIdentifier: number): string {
+//   const storeUrls: Record<number, string> = {
+//     0: "https://www.google.com.br/maps/rpc/listugcposts?authuser=0&hl=pt-BR&gl=br&pb=!1m8!1s0x94b64399cc827d1d%3A0xcfd43c9cb0e9088c!3s!6m4!4m1!1e1!4m1!1e3!9b0!2m2!1i10!2sCAESdkNBRVFGQnBTUTJkblNVRm9TVUZIUVVWcFFVRnZlRU5CUlZOTFVXOUxRVVF0WDNremIxbEpabDlmWDNoSlVVMURjbU5GU0RVMU9EWkhlbU5JVDFkQlFVRkJRVUp2U2w5bGRWRkJiMWxGYmxOMWFVZEJRV2xCUVE%3D!5m2!1soMA4ZryrBdHe1sQPiJ6PiA0!7e81!8m5!1b1!2b1!3b1!5b1!7b1!11m6!1e3!2e1!3spt-BR!4sbr!6m1!1i2!13m1!1e1",
+//     1: "https://www.google.com/maps/rpc/listugcposts?authuser=0&hl=en&gl=br&pb=!1m7!1s0x9bd5b81cec9b05%3A0xc9b595f28b3ca216!3s!6m4!4m1!1e1!4m1!1e3!2m2!1i10!2s!5m2!1snLfvZYyyCoHS1sQPxZSTiAw!7e81!8m5!1b1!2b1!3b1!5b1!7b1!11m6!1e3!2e1!3sen!4sbr!6m1!1i2!13m1!1e2",
+//   };
+
+//   return storeUrls[storeIdentifier] || "";
+// }
+
+// async function main() {
+//   const storeIdentifier = 1; // Número da loja desejada
+//   const reviews = await fetchReviews(storeIdentifier);
+
+//   console.log(reviews);
+// }
+
+// main();

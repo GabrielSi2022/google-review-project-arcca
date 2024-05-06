@@ -3,6 +3,7 @@ export type ListOutputDtoReviews = {
     classification: number;
     date: Date;
     text: string;
+    answer: string;
     createdAt: Date;
     updatedAt: Date;
   }[];
@@ -13,6 +14,7 @@ export type CreateOutputDtoReviews = {
     classification: number;
     date: Date;
     text: string;
+    answer: string;
     createdAt: Date;
     updatedAt: Date;
   };
@@ -23,6 +25,7 @@ export interface ReviewsService {
     classification: number,
     date: Date,
     text: string,
+    answer: string,
     createdAt: Date,
     updatedAt: Date
   ): Promise<CreateOutputDtoReviews>;

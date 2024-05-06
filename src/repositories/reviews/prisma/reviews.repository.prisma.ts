@@ -3,32 +3,37 @@ import { Reviews } from "../../../entities/reviews";
 import { ReviewsRepository } from "../reviews.repository";
 
 export class ReviewsRepositoryPrisma implements ReviewsRepository {
-  private constructor(readonly prisma: PrismaClient) {}
+  private readonly prisma: PrismaClient;
 
-  public static build(prisma: PrismaClient) {
+  constructor(prisma: PrismaClient) {
+    this.prisma = prisma;
+  }
+
+  static build(prisma: PrismaClient): ReviewsRepositoryPrisma {
     return new ReviewsRepositoryPrisma(prisma);
   }
 
-  public async save(reviews: Reviews): Promise<void> {
-    const data = {
-      classification: reviews.classification,
-      date: reviews.date,
-      text: reviews.text,
-      createdAt: reviews.createdAt,
-      updatedAt: reviews.updatedAt,
-    };
-
-    await this.prisma.review.create({ data });
+  async save(reviews: Reviews): Promise<void> {
+    try {
+      const { classification, date, text, answer, createdAt, updatedAt } =
+        reviews;
+      await this.prisma.review.create({
+        data: { classification, date, text, answer, createdAt, updatedAt },
+      });
+    } catch (error: any) {
+      throw new Error(`Failed to save review: ${error.message}`);
+    }
   }
 
-  public async list(): Promise<Reviews[]> {
-    const aReviews = await this.prisma.review.findMany();
-
-    const reviews: Reviews[] = aReviews.map((r) => {
-      const { classification, date, text, createdAt, updatedAt } = r;
-      return Reviews.with(classification, date, text, createdAt, updatedAt);
-    });
-
-    return reviews;
+  async list(): Promise<Reviews[]> {
+    try {
+      const reviewsFromDB = await this.prisma.review.findMany();
+      return reviewsFromDB.map(
+        ({ classification, date, text, answer, createdAt, updatedAt }) =>
+          Reviews.with(classification, date, text, answer, createdAt, updatedAt)
+      );
+    } catch (error: any) {
+      throw new Error(`Failed to list reviews: ${error.message}`);
+    }
   }
 }

@@ -3,30 +3,35 @@ import { UserReviews } from "../../../entities/userReviews";
 import { UserReviewsRepository } from "../userReviews.repository";
 
 export class UserReviewsRepositoryPrisma implements UserReviewsRepository {
-  private constructor(readonly prisma: PrismaClient) {}
+  private readonly prisma: PrismaClient;
 
-  public static build(prisma: PrismaClient) {
+  constructor(prisma: PrismaClient) {
+    this.prisma = prisma;
+  }
+
+  static build(prisma: PrismaClient): UserReviewsRepositoryPrisma {
     return new UserReviewsRepositoryPrisma(prisma);
   }
 
-  public async save(userReviews: UserReviews): Promise<void> {
-    const data = {
-      id: userReviews.id,
-      name: userReviews.name,
-      imgUrl: userReviews.imgUrl,
-    };
-
-    await this.prisma.userReviews.create({ data });
+  async save(userReviews: UserReviews): Promise<void> {
+    try {
+      const { id, name, imgUrl } = userReviews;
+      await this.prisma.userReviews.create({
+        data: { id, name, imgUrl },
+      });
+    } catch (error: any) {
+      throw new Error(`Falha ao salvar userReview: ${error.message}`);
+    }
   }
 
-  public async list(): Promise<UserReviews[]> {
-    const aUserReviews = await this.prisma.userReviews.findMany();
-
-    const userReviews: UserReviews[] = aUserReviews.map((u) => {
-      const { id, name, imgUrl } = u;
-      return UserReviews.with(id, name, imgUrl);
-    });
-
-    return userReviews;
+  async list(): Promise<UserReviews[]> {
+    try {
+      const userReviewsFromDB = await this.prisma.userReviews.findMany();
+      return userReviewsFromDB.map(({ id, name, imgUrl }) =>
+        UserReviews.with(id, name, imgUrl)
+      );
+    } catch (error: any) {
+      throw new Error(`Falha ao listar userReviews: ${error.message}`);
+    }
   }
 }

@@ -7,45 +7,48 @@ import {
 } from "../userReviews.service";
 
 export class UserReviewsServiceImplementation implements UserReviewsService {
-  private constructor(readonly repository: UserReviewsRepository) {}
+  constructor(private readonly repository: UserReviewsRepository) {}
 
-  public static build(repository: UserReviewsRepository) {
+  static build(
+    repository: UserReviewsRepository
+  ): UserReviewsServiceImplementation {
     return new UserReviewsServiceImplementation(repository);
   }
 
-  public async create(
+  async create(
     id: string,
     name: string,
     imgUrl: string
   ): Promise<CreateUserReviewsOutputDto> {
-    const aUserReviews = UserReviews.create(id, name, imgUrl);
-    await this.repository.save(aUserReviews);
+    try {
+      const userReview = UserReviews.create(id, name, imgUrl);
+      await this.repository.save(userReview);
 
-    const output: CreateUserReviewsOutputDto = {
-      userReviews: {
-        id: aUserReviews.id,
-        name: aUserReviews.name,
-        imgUrl: aUserReviews.imgUrl,
-      },
-    };
-    return output;
+      return {
+        userReviews: {
+          id: userReview.id,
+          name: userReview.name,
+          imgUrl: userReview.imgUrl,
+        },
+      };
+    } catch (error: any) {
+      throw new Error(`Falha ao criar os reviews: ${error.message}`);
+    }
   }
 
-  public async list(): Promise<ListUserReviewsOutputDto> {
-    const aUserReviews = await this.repository.list();
+  async list(): Promise<ListUserReviewsOutputDto> {
+    try {
+      const userReviews = await this.repository.list();
 
-    const userReviews = aUserReviews.map((u) => {
       return {
-        id: u.id,
-        name: u.name,
-        imgUrl: u.imgUrl,
+        userReviews: userReviews.map((userReview) => ({
+          id: userReview.id,
+          name: userReview.name,
+          imgUrl: userReview.imgUrl,
+        })),
       };
-    });
-
-    const output: ListUserReviewsOutputDto = {
-      userReviews: userReviews,
-    };
-
-    return output;
+    } catch (error: any) {
+      throw new Error(`Falha ao listar os reviews: ${error.message}`);
+    }
   }
 }

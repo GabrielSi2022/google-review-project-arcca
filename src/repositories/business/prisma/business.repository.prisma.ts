@@ -3,39 +3,39 @@ import { Business } from "../../../entities/business";
 import { BusinessRepository } from "../business.repositoy";
 
 export class BusinessRepositoryPrisma implements BusinessRepository {
-  private constructor(readonly prisma: PrismaClient) {}
+  constructor(private readonly prisma: PrismaClient) {}
 
-  public static build(prisma: PrismaClient) {
+  static build(prisma: PrismaClient): BusinessRepositoryPrisma {
     return new BusinessRepositoryPrisma(prisma);
   }
 
-  public async save(business: Business): Promise<void> {
-    const data = {
-      nameBusiness: business.nameBusiness,
-      addressMap: business.addressMap,
-      addressReview: business.addressReview,
-      createdAt: business.createdAt,
-      updatedAt: business.updatedAt,
-    };
-
-    await this.prisma.business.create({ data });
+  async save(business: Business): Promise<void> {
+    try {
+      const { nameBusiness, addressMap, addressReview, createdAt, updatedAt } =
+        business;
+      await this.prisma.business.create({
+        data: { nameBusiness, addressMap, addressReview, createdAt, updatedAt },
+      });
+    } catch (error: any) {
+      throw new Error(`Falha ao salvar a empresa: ${error.message}`);
+    }
   }
 
-  public async list(): Promise<Business[]> {
-    const aBusiness = await this.prisma.business.findMany();
-
-    const business: Business[] = aBusiness.map((b) => {
-      const { nameBusiness, addressMap, addressReview, createdAt, updatedAt } =
-        b;
-      return Business.with(
-        nameBusiness,
-        addressMap,
-        addressReview,
-        createdAt,
-        updatedAt
+  async list(): Promise<Business[]> {
+    try {
+      const businessesFromDB = await this.prisma.business.findMany();
+      return businessesFromDB.map(
+        ({ nameBusiness, addressMap, addressReview, createdAt, updatedAt }) =>
+          Business.with(
+            nameBusiness,
+            addressMap,
+            addressReview,
+            createdAt,
+            updatedAt
+          )
       );
-    });
-
-    return business;
+    } catch (error: any) {
+      throw new Error(`Falha ao listar a empresa: ${error.message}`);
+    }
   }
 }

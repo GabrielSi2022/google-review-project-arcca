@@ -2,6 +2,7 @@ export type ReviewsProps = {
   classification: number;
   date: Date;
   text: string;
+  answer: string;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -12,6 +13,7 @@ export class Reviews {
     classification: number,
     date: Date,
     text: string,
+    answer: string,
     createdAt: Date,
     updatedAt: Date
   ) {
@@ -19,6 +21,7 @@ export class Reviews {
       classification,
       date,
       text,
+      answer,
       createdAt,
       updatedAt,
     });
@@ -28,6 +31,7 @@ export class Reviews {
     classification: number,
     date: Date,
     text: string,
+    answer: string,
     createdAt: Date,
     updatedAt: Date
   ) {
@@ -35,6 +39,7 @@ export class Reviews {
       classification,
       date,
       text,
+      answer,
       createdAt,
       updatedAt,
     });
@@ -50,6 +55,10 @@ export class Reviews {
 
   public get text() {
     return this.props.text;
+  }
+
+  public get answer() {
+    return this.props.answer;
   }
 
   public get createdAt() {

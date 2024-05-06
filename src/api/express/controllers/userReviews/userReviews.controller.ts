@@ -1,7 +1,7 @@
+import { Request, Response } from "express";
 import { UserReviewsRepositoryPrisma } from "../../../../repositories/userReviews/prisma/userReviews.repository.prisma";
 import { UserReviewsServiceImplementation } from "../../../../services/userReviews/implementation/userReviews.service.implamentation";
 import { prisma } from "../../../../util/prisma.util";
-import { Request, Response } from "express";
 
 export class UserReviewsController {
   private constructor() {}
@@ -13,30 +13,22 @@ export class UserReviewsController {
   public async create(req: Request, res: Response) {
     const { id, name, imgUrl } = req.body;
 
-    const aRepository = UserReviewsRepositoryPrisma.build(prisma);
-    const aService = UserReviewsServiceImplementation.build(aRepository);
+    const repository = UserReviewsRepositoryPrisma.build(prisma);
+    const service = UserReviewsServiceImplementation.build(repository);
 
-    const output = await aService.create(id, name, imgUrl);
+    const output = await service.create(id, name, imgUrl);
 
-    const data = {
-      id: id,
-      name: name,
-      imgUrl: imgUrl,
-    };
-
-    res.status(201).json(data);
+    const responseData = { id, name, imgUrl };
+    res.status(201).json(responseData);
   }
 
   public async list(req: Request, res: Response) {
-    const aRepository = UserReviewsRepositoryPrisma.build(prisma);
-    const aService = UserReviewsServiceImplementation.build(aRepository);
+    const repository = UserReviewsRepositoryPrisma.build(prisma);
+    const service = UserReviewsServiceImplementation.build(repository);
 
-    const output = await aService.list();
+    const output = await service.list();
 
-    const data = {
-      userReviews: output.userReviews,
-    };
-
-    res.status(200).json(data);
+    const responseData = { userReviews: output.userReviews };
+    res.status(200).json(responseData);
   }
 }
