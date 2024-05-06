@@ -32,7 +32,7 @@ model Review {
   classification Int
   date           DateTime @default(dbgenerated("now()"))
   text           String
-  answer         String?
+  answer         String
 
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt

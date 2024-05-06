@@ -16,7 +16,7 @@ CREATE TABLE "reviews" (
     "classification" INTEGER NOT NULL,
     "date" TIMESTAMP(3) NOT NULL DEFAULT now(),
     "text" TEXT NOT NULL,
-    "answer" TEXT,
+    "answer" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "businessId" TEXT,
