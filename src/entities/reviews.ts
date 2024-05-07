@@ -7,6 +7,7 @@ export type ReviewsProps = {
   updatedAt: Date;
   userId: string;
   reviewsId: string;
+  businessId: string;
 };
 
 export class Reviews {
@@ -19,7 +20,8 @@ export class Reviews {
     createdAt: Date,
     updatedAt: Date,
     userId: string,
-    reviewsId: string
+    reviewsId: string,
+    businessId: string
   ) {
     return new Reviews({
       classification,
@@ -30,6 +32,7 @@ export class Reviews {
       updatedAt,
       userId,
       reviewsId,
+      businessId,
     });
   }
 
@@ -41,7 +44,8 @@ export class Reviews {
     createdAt: Date,
     updatedAt: Date,
     userId: string,
-    reviewsId: string
+    reviewsId: string,
+    businessId: string
   ) {
     return new Reviews({
       classification,
@@ -52,6 +56,7 @@ export class Reviews {
       updatedAt,
       userId,
       reviewsId,
+      businessId,
     });
   }
 
@@ -85,5 +90,9 @@ export class Reviews {
 
   public get reviewsId() {
     return this.props.reviewsId;
+  }
+
+  public get businessId() {
+    return this.props.businessId;
   }
 }

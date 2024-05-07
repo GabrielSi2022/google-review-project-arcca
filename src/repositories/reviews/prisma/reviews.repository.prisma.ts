@@ -24,6 +24,7 @@ export class ReviewsRepositoryPrisma implements ReviewsRepository {
         updatedAt,
         userId: userReviewsId,
         reviewsId,
+        businessId: id,
       } = reviews;
 
       await this.prisma.review.upsert({
@@ -38,6 +39,7 @@ export class ReviewsRepositoryPrisma implements ReviewsRepository {
           updatedAt,
           userReviews: { connect: { id: userReviewsId } },
           id: reviewsId,
+          Business: { connect: { id: id } },
         },
 
         update: {
@@ -66,6 +68,7 @@ export class ReviewsRepositoryPrisma implements ReviewsRepository {
           createdAt,
           updatedAt,
           userReviewsId: userId,
+          id: businessId,
         }) =>
           Reviews.with(
             classification,
@@ -74,7 +77,8 @@ export class ReviewsRepositoryPrisma implements ReviewsRepository {
             answer,
             createdAt,
             updatedAt,
-            userId
+            userId,
+            businessId
           )
       );
     } catch (error: any) {

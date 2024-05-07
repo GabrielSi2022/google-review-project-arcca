@@ -1,6 +1,7 @@
 export type ListOutputDtoBusiness = {
   business: {
     nameBusiness: string;
+    id: string;
     addressMap: string;
     addressReview: string;
     createdAt: Date;
@@ -11,6 +12,7 @@ export type ListOutputDtoBusiness = {
 export type CreateOutputDtoBusiness = {
   business: {
     nameBusiness: string;
+    id: string;
     addressMap: string;
     addressReview: string;
     createdAt: Date;
@@ -21,6 +23,7 @@ export type CreateOutputDtoBusiness = {
 export interface BusinessService {
   create(
     nameBusiness: string,
+    id: string,
     addressMap: string,
     addressReview: string,
     createdAt: Date,

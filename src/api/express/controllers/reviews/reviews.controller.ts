@@ -4,6 +4,8 @@ import { ReviewsServiceImplementation } from "../../../../services/reviews/imple
 import { prisma } from "../../../../util/prisma.util";
 import { UserReviewsRepositoryPrisma } from "../../../../repositories/userReviews/prisma/userReviews.repository.prisma";
 import { UserReviewsServiceImplementation } from "../../../../services/userReviews/implementation/userReviews.service.implamentation";
+import { BusinessRepositoryPrisma } from "../../../../repositories/business/prisma/business.repository.prisma";
+import { BusinessServiceImplementation } from "../../../../services/business/implementation/business.service.implementation";
 
 export class ReviewsController {
   private constructor() {}
@@ -24,14 +26,29 @@ export class ReviewsController {
       userName,
       imgUrl,
       reviewsId,
+      businessId,
+      nameBusiness,
+      addressMap,
+      addressReview,
     } = req.body;
 
     const repository = ReviewsRepositoryPrisma.build(prisma);
     const service = ReviewsServiceImplementation.build(repository);
     const userRepository = UserReviewsRepositoryPrisma.build(prisma);
     const userService = UserReviewsServiceImplementation.build(userRepository);
+    const businessRepository = BusinessRepositoryPrisma.build(prisma);
+    const businessService =
+      BusinessServiceImplementation.build(businessRepository);
 
     const userOutput = await userService.create(userId, userName, "");
+    const businessOutput = await businessService.create(
+      nameBusiness,
+      businessId,
+      addressMap,
+      addressReview,
+      createdAt,
+      updatedAt
+    );
 
     const output = await service.create(
       classification,
@@ -41,7 +58,8 @@ export class ReviewsController {
       createdAt,
       updatedAt,
       userId,
-      reviewsId
+      reviewsId,
+      businessId
     );
 
     const responseData = {

@@ -21,7 +21,8 @@ export class ReviewsServiceImplementation implements ReviewsService {
     createdAt: Date,
     updatedAt: Date,
     userId: string,
-    reviewsId: string
+    reviewsId: string,
+    businessId: string
   ): Promise<CreateOutputDtoReviews> {
     try {
       const review = Reviews.create(
@@ -32,7 +33,8 @@ export class ReviewsServiceImplementation implements ReviewsService {
         createdAt || new Date(),
         updatedAt || new Date(),
         userId,
-        reviewsId
+        reviewsId,
+        businessId
       );
 
       await this.repository.save(review);
@@ -47,6 +49,7 @@ export class ReviewsServiceImplementation implements ReviewsService {
           updatedAt: review.updatedAt,
           userId: review.userId,
           reviewsId: review.reviewsId,
+          businessId: review.businessId,
         },
       };
     } catch (error: any) {
@@ -68,6 +71,7 @@ export class ReviewsServiceImplementation implements ReviewsService {
           updatedAt: review.updatedAt,
           userId: review.userId,
           reviewsId: review.reviewsId,
+          businessId: review.businessId,
         })),
       };
 

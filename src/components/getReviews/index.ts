@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Reviews } from "../../entities/reviews";
+import { Business } from "../../entities/business";
 
 async function fetchReviews(storeIdentifier: number): Promise<any[]> {
   const query = findQueryByStoreIdentifier(storeIdentifier);
@@ -66,6 +67,19 @@ function parseResponse(jsonString: string): any[] {
   return JSON.parse(cleanedJson);
 }
 
+async function getBusiness() {
+  try {
+    const response = await axios.get("http://localhost:3000/business");
+
+    const urls = response.data.business.map(
+      (business: Business) => business.addressReview
+    );
+    console.log(urls);
+  } catch (error) {
+    console.error("Erro ao listar as empresas:", error);
+  }
+}
+
 function findQueryByStoreIdentifier(storeIdentifier: number): string {
   const storeUrls: Record<number, string> = {
     0: "https://www.google.com.br/maps/rpc/listugcposts?authuser=0&hl=pt-BR&gl=br&pb=!1m8!1s0x94b64399cc827d1d%3A0xcfd43c9cb0e9088c!3s!6m4!4m1!1e1!4m1!1e3!9b0!2m2!1i10!2sCAESdkNBRVFGQnBTUTJkblNVRm9TVUZIUVVWcFFVRnZlRU5CUlZOTFVXOUxRVVF0WDNremIxbEpabDlmWDNoSlVVMURjbU5GU0RVMU9EWkhlbU5JVDFkQlFVRkJRVUp2U2w5bGRWRkJiMWxGYmxOMWFVZEJRV2xCUVE%3D!5m2!1soMA4ZryrBdHe1sQPiJ6PiA0!7e81!8m5!1b1!2b1!3b1!5b1!7b1!11m6!1e3!2e1!3spt-BR!4sbr!6m1!1i2!13m1!1e1",
@@ -92,10 +106,12 @@ async function main() {
   const storeIdentifier = 1; // Número da loja desejada
   const reviews = await fetchReviews(storeIdentifier);
 
-  console.log(reviews);
-  for (const review of reviews) {
-    await postReviews(review);
-  }
+  // console.log(reviews);
+  // for (const review of reviews) {
+  //   await postReviews(review);
+  // }
+
+  await getBusiness();
 }
 
 main();

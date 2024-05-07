@@ -1,5 +1,6 @@
 export type BusinessProps = {
   nameBusiness: string;
+  id: string;
   addressMap: string;
   addressReview: string;
   createdAt: Date;
@@ -10,6 +11,7 @@ export class Business {
   private constructor(readonly props: BusinessProps) {}
   public static create(
     nameBusiness: string,
+    id: string,
     addressMap: string,
     addressReview: string,
     createdAt: Date,
@@ -17,6 +19,7 @@ export class Business {
   ) {
     return new Business({
       nameBusiness,
+      id,
       addressMap,
       addressReview,
       createdAt,
@@ -26,6 +29,7 @@ export class Business {
 
   public static with(
     nameBusiness: string,
+    id: string,
     addressMap: string,
     addressReview: string,
     createdAt: Date,
@@ -33,6 +37,7 @@ export class Business {
   ) {
     return new Business({
       nameBusiness,
+      id: nameBusiness,
       addressMap,
       addressReview,
       createdAt,
@@ -42,6 +47,10 @@ export class Business {
 
   public get nameBusiness() {
     return this.props.nameBusiness;
+  }
+
+  public get id() {
+    return this.props.id;
   }
 
   public get addressMap() {

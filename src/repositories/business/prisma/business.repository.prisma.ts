@@ -11,10 +11,32 @@ export class BusinessRepositoryPrisma implements BusinessRepository {
 
   async save(business: Business): Promise<void> {
     try {
-      const { nameBusiness, addressMap, addressReview, createdAt, updatedAt } =
-        business;
-      await this.prisma.business.create({
-        data: { nameBusiness, addressMap, addressReview, createdAt, updatedAt },
+      const {
+        nameBusiness,
+        id,
+        addressMap,
+        addressReview,
+        createdAt,
+        updatedAt,
+      } = business;
+      await this.prisma.business.upsert({
+        where: { id: id },
+        create: {
+          nameBusiness,
+          id,
+          addressMap,
+          addressReview,
+          createdAt,
+          updatedAt,
+        },
+        update: {
+          nameBusiness,
+          id,
+          addressMap,
+          addressReview,
+          createdAt,
+          updatedAt,
+        },
       });
     } catch (error: any) {
       throw new Error(`Falha ao salvar a empresa: ${error.message}`);
@@ -25,9 +47,17 @@ export class BusinessRepositoryPrisma implements BusinessRepository {
     try {
       const businessesFromDB = await this.prisma.business.findMany();
       return businessesFromDB.map(
-        ({ nameBusiness, addressMap, addressReview, createdAt, updatedAt }) =>
+        ({
+          nameBusiness,
+          id,
+          addressMap,
+          addressReview,
+          createdAt,
+          updatedAt,
+        }) =>
           Business.with(
             nameBusiness,
+            id,
             addressMap,
             addressReview,
             createdAt,

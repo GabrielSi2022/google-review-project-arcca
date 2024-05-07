@@ -15,6 +15,7 @@ export class BusinessServiceImplementation implements BusinessService {
 
   async create(
     nameBusiness: string,
+    id: string,
     addressMap: string,
     addressReview: string,
     createdAt: Date,
@@ -23,6 +24,7 @@ export class BusinessServiceImplementation implements BusinessService {
     try {
       const aBusiness = Business.create(
         nameBusiness,
+        id,
         addressMap,
         addressReview,
         createdAt,
@@ -33,6 +35,7 @@ export class BusinessServiceImplementation implements BusinessService {
       return {
         business: {
           nameBusiness: aBusiness.nameBusiness,
+          id: aBusiness.id,
           addressMap: aBusiness.addressMap,
           addressReview: aBusiness.addressReview,
           createdAt: aBusiness.createdAt,
@@ -50,6 +53,7 @@ export class BusinessServiceImplementation implements BusinessService {
 
       const business = aBusiness.map((b) => ({
         nameBusiness: b.nameBusiness,
+        id: b.id,
         addressMap: b.addressMap,
         addressReview: b.addressReview,
         createdAt: b.createdAt,
