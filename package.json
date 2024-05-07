@@ -30,6 +30,7 @@
     "express": "^4.19.2",
     "pg": "^8.11.5",
     "puppeteer": "^22.7.1",
+    "readline-sync": "^1.4.10",
     "serverless-express": "^2.0.12",
     "serverless-http": "^3.2.0",
     "tsc": "^2.0.4",
