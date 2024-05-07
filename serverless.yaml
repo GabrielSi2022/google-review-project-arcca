@@ -1,0 +1,32 @@
+org: GabrielSi2022
+app: google-review-project-arcca
+service: google-review-project-arcca
+
+frameworkVersion: "3"
+
+useDotenv: true
+
+plugins:
+  - serverless-offline
+  - serverless-plugin-optimize
+  - serverless-express
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  architecture: arm64
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'ap-south-1'}
+  memorySize: 128
+  logRetentionInDays: 1
+  timeout: 15
+  environment:
+    DATABASE_URL: ${env:DATABASE_URL}
+
+functions:
+  api:
+    handler: build/lambda.handler
+    events:
+      - httpApi:
+          method: any
+          path: /{proxy+}

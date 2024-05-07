@@ -1,5 +1,7 @@
 import express, { Express, Request, Response } from "express";
+
 import { Api } from "../api";
+import serverless from "serverless-http";
 
 export class ApiExpress implements Api {
   private constructor(readonly app: Express) {}
@@ -29,6 +31,9 @@ export class ApiExpress implements Api {
       console.log("Server runing on port" + port);
       this.printRoutes();
     });
+  }
+  public lambda() {
+    module.exports.handler = serverless(this.app);
   }
 
   private printRoutes() {
