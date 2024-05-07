@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { ReviewsRepositoryPrisma } from "../../../../repositories/reviews/prisma/reviews.repository.prisma";
 import { ReviewsServiceImplementation } from "../../../../services/reviews/implementation/reviews.service.implementation";
 import { prisma } from "../../../../util/prisma.util";
+import { UserReviewsRepositoryPrisma } from "../../../../repositories/userReviews/prisma/userReviews.repository.prisma";
+import { UserReviewsServiceImplementation } from "../../../../services/userReviews/implementation/userReviews.service.implamentation";
 
 export class ReviewsController {
   private constructor() {}
@@ -11,11 +13,25 @@ export class ReviewsController {
   }
 
   public async create(req: Request, res: Response) {
-    const { classification, date, text, answer, createdAt, updatedAt } =
-      req.body;
+    const {
+      classification,
+      date,
+      text,
+      answer,
+      createdAt,
+      updatedAt,
+      userId,
+      userName,
+      imgUrl,
+      reviewsId,
+    } = req.body;
 
     const repository = ReviewsRepositoryPrisma.build(prisma);
     const service = ReviewsServiceImplementation.build(repository);
+    const userRepository = UserReviewsRepositoryPrisma.build(prisma);
+    const userService = UserReviewsServiceImplementation.build(userRepository);
+
+    const userOutput = await userService.create(userId, userName, "");
 
     const output = await service.create(
       classification,
@@ -23,7 +39,9 @@ export class ReviewsController {
       text,
       answer,
       createdAt,
-      updatedAt
+      updatedAt,
+      userId,
+      reviewsId
     );
 
     const responseData = {
@@ -33,6 +51,7 @@ export class ReviewsController {
       answer,
       createdAt,
       updatedAt,
+      reviewsId,
     };
     res.status(201).json(responseData);
   }

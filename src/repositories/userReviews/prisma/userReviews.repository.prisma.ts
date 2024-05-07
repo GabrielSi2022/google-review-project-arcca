@@ -16,8 +16,10 @@ export class UserReviewsRepositoryPrisma implements UserReviewsRepository {
   async save(userReviews: UserReviews): Promise<void> {
     try {
       const { id, name, imgUrl } = userReviews;
-      await this.prisma.userReviews.create({
-        data: { id, name, imgUrl },
+      await this.prisma.userReviews.upsert({
+        where: { id },
+        create: { id, name, imgUrl },
+        update: { name, imgUrl },
       });
     } catch (error: any) {
       throw new Error(`Falha ao salvar userReview: ${error.message}`);

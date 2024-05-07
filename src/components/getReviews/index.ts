@@ -9,7 +9,6 @@ async function fetchReviews(storeIdentifier: number): Promise<any[]> {
   let structuredResponse: any[] = [];
   const reviews: any[] = [];
 
-  let maxPages = 3;
   do {
     const paginatedQuery = insertTokenIntoQuery(query, paginationToken);
     try {
@@ -18,17 +17,17 @@ async function fetchReviews(storeIdentifier: number): Promise<any[]> {
       if (structuredResponse.length < 1) break;
       responsesList.push(structuredResponse);
       paginationToken = structuredResponse[1];
-      maxPages--;
     } catch (error) {
       console.error("Erro ao buscar reviews:", error);
       break;
     }
-  } while (maxPages > 0 && paginationToken !== null);
+  } while (paginationToken !== null);
 
   for (const responseUnit of responsesList) {
     const reviewArray = responseUnit[2];
     for (const reviewUnit of reviewArray) {
       const review = {
+        reviewsId: reviewUnit[0][0],
         classification: reviewUnit[0][2][0][0],
         userId: reviewUnit[0][1][4][0][13],
         userName: reviewUnit[0][1][4][0][4],
@@ -94,9 +93,9 @@ async function main() {
   const reviews = await fetchReviews(storeIdentifier);
 
   console.log(reviews);
-  // for (const review of reviews) {
-  //   await postReviews(review);
-  // }
+  for (const review of reviews) {
+    await postReviews(review);
+  }
 }
 
 main();
