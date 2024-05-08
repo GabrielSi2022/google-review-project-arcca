@@ -17,31 +17,18 @@ export class BusinessServiceImplementation implements BusinessService {
     nameBusiness: string,
     id: string,
     addressMap: string,
-    addressReview: string,
-    createdAt: Date,
-    updatedAt: Date
+    addressReview: string
   ): Promise<CreateOutputDtoBusiness> {
     try {
-      const aBusiness = Business.create(
+      const business = Business.create(
         nameBusiness,
         id,
         addressMap,
-        addressReview,
-        createdAt,
-        updatedAt
+        addressReview
       );
-      await this.repository.save(aBusiness);
+      await this.repository.save(business);
 
-      return {
-        business: {
-          nameBusiness: aBusiness.nameBusiness,
-          id: aBusiness.id,
-          addressMap: aBusiness.addressMap,
-          addressReview: aBusiness.addressReview,
-          createdAt: aBusiness.createdAt,
-          updatedAt: aBusiness.updatedAt,
-        },
-      };
+      return { business };
     } catch (error: any) {
       throw new Error(`Falha ao criar a empresa: ${error.message}`);
     }
@@ -49,16 +36,7 @@ export class BusinessServiceImplementation implements BusinessService {
 
   async list(): Promise<ListOutputDtoBusiness> {
     try {
-      const aBusiness = await this.repository.list();
-
-      const business = aBusiness.map((b) => ({
-        nameBusiness: b.nameBusiness,
-        id: b.id,
-        addressMap: b.addressMap,
-        addressReview: b.addressReview,
-        createdAt: b.createdAt,
-        updatedAt: b.updatedAt,
-      }));
+      const business = await this.repository.list();
 
       return { business };
     } catch (error: any) {
