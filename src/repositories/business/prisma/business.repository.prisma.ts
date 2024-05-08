@@ -16,8 +16,6 @@ export class BusinessRepositoryPrisma implements BusinessRepository {
         id,
         addressMap,
         addressReview,
-        createdAt,
-        updatedAt,
       } = business;
       await this.prisma.business.upsert({
         where: { id: id },
@@ -25,17 +23,13 @@ export class BusinessRepositoryPrisma implements BusinessRepository {
           nameBusiness,
           id,
           addressMap,
-          addressReview,
-          createdAt,
-          updatedAt,
+          addressReview, 
         },
         update: {
           nameBusiness,
           id,
           addressMap,
-          addressReview,
-          createdAt,
-          updatedAt,
+          addressReview
         },
       });
     } catch (error: any) {
@@ -51,17 +45,13 @@ export class BusinessRepositoryPrisma implements BusinessRepository {
           nameBusiness,
           id,
           addressMap,
-          addressReview,
-          createdAt,
-          updatedAt,
+          addressReview
         }) =>
           Business.with(
             nameBusiness,
             id,
             addressMap,
-            addressReview,
-            createdAt,
-            updatedAt
+            addressReview
           )
       );
     } catch (error: any) {
