@@ -12,14 +12,13 @@ export class UrlController {
   public async create(req: Request, res: Response) {
     const { url } = req.body;
 
-    const response = await getUrl(url);
+    const { nameBusiness, id, addressMap, addressReview } = await getUrl(url);
 
-    await axios.post("http://localhost:3000/business/create", response);
+    const { data } = await axios.post(
+      "http://localhost:3000/business/create",
+      { nameBusiness, id, addressMap, addressReview }
+    );
 
-    const responseData = {
-      response,
-    };
-
-    res.status(201).json(responseData);
+    res.status(201).json(data);
   }
 }
