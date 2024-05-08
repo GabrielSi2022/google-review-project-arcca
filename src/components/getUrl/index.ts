@@ -1,7 +1,11 @@
 import puppeteer from "puppeteer";
 
 export async function getUrl(urlPage: string) {
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ["--incognito"],
+    userDataDir: "/dev/null",
+  });
   const page = await browser.newPage();
   let links: string[] = [];
 
@@ -18,14 +22,14 @@ export async function getUrl(urlPage: string) {
   const title = await page.$eval("h1", (item) => item.textContent);
   interface CustomWindow extends Window {
     APP_INITIALIZATION_STATE?: string; // ou o tipo apropriado da propriedade
-}
+  }
 
-const appInitializationState = await page.evaluate(()=>{
-  const customWindow = window as CustomWindow;
-  let appState: any = customWindow.APP_INITIALIZATION_STATE;
+  const appInitializationState = await page.evaluate(() => {
+    const customWindow = window as CustomWindow;
+    let appState: any = customWindow.APP_INITIALIZATION_STATE;
 
-  return appState
-})
+    return appState;
+  });
   await page.waitForNavigation();
   await page.click("[jslog^='145620']");
   await page.waitForNavigation();
@@ -63,8 +67,7 @@ const appInitializationState = await page.evaluate(()=>{
     title,
     url: urlPage,
     link: selectItem,
-  }
-  )
+  });
 
   return {
     id: appInitializationState[5][3][2][0],
