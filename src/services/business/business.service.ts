@@ -4,8 +4,6 @@ export type ListOutputDtoBusiness = {
     id: string;
     addressMap: string;
     addressReview: string;
-    createdAt: Date;
-    updatedAt: Date;
   }[];
 };
 
@@ -15,8 +13,6 @@ export type CreateOutputDtoBusiness = {
     id: string;
     addressMap: string;
     addressReview: string;
-    createdAt: Date;
-    updatedAt: Date;
   };
 };
 
@@ -25,9 +21,7 @@ export interface BusinessService {
     nameBusiness: string,
     id: string,
     addressMap: string,
-    addressReview: string,
-    createdAt: Date,
-    updatedAt: Date
+    addressReview: string
   ): Promise<CreateOutputDtoBusiness>;
   list(): Promise<ListOutputDtoBusiness>;
 }
