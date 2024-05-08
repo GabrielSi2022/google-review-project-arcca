@@ -15,6 +15,7 @@ function main() {
   api.addGetRoute("/business", controllerBusiness.list);
   api.addPostRoute("/business/create", controllerBusiness.create);
   api.addGetRoute("/reviews", controllerReviews.list);
+  api.addGetRoute("/reviews/update", controllerBusiness.update);
   api.addPostRoute("/reviews/create", controllerReviews.create);
   api.addGetRoute("/userReviews", controllerUserReviews.list);
   api.addPostRoute("/userReviews/create", controllerUserReviews.create);
