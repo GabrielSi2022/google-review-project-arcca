@@ -17,39 +17,28 @@ export class ReviewsRepositoryPrisma implements ReviewsRepository {
     try {
       const {
         classification,
-        date,
         text,
         answer,
-        createdAt,
-        updatedAt,
         userId: userReviewsId,
         reviewsId,
-        businessId: id,
+        businessId,
       } = reviews;
 
       await this.prisma.review.upsert({
         where: { id: reviewsId },
-
         create: {
           classification,
-          date,
           text,
           answer,
-          createdAt,
-          updatedAt,
           userReviews: { connect: { id: userReviewsId } },
           id: reviewsId,
-          Business: { connect: { id: id } },
+          Business: { connect: { id: businessId } },
         },
-
         update: {
           classification,
-          date,
           text,
-          answer,
-          createdAt,
-          updatedAt,
-        },
+          answer
+        }
       });
     } catch (error: any) {
       throw new Error(`Failed to save review: ${error.message}`);
@@ -61,24 +50,20 @@ export class ReviewsRepositoryPrisma implements ReviewsRepository {
       const reviewsFromDB = await this.prisma.review.findMany();
       return reviewsFromDB.map(
         ({
+          id,
           classification,
-          date,
           text,
           answer,
-          createdAt,
-          updatedAt,
           userReviewsId: userId,
-          id: businessId,
+          businessId,
         }) =>
           Reviews.with(
-            classification,
-            date,
-            text,
-            answer,
-            createdAt,
-            updatedAt,
-            userId,
-            businessId
+          classification,
+          text,
+          answer,
+          userId!,
+          id,
+          businessId!,
           )
       );
     } catch (error: any) {
