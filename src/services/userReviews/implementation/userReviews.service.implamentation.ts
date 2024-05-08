@@ -21,16 +21,10 @@ export class UserReviewsServiceImplementation implements UserReviewsService {
     imgUrl: string
   ): Promise<CreateUserReviewsOutputDto> {
     try {
-      const userReview = UserReviews.create(id, name, imgUrl);
-      await this.repository.save(userReview);
+      const userReviews = UserReviews.create(id, name, imgUrl);
+      await this.repository.save(userReviews);
 
-      return {
-        userReviews: {
-          id: userReview.id,
-          name: userReview.name,
-          imgUrl: userReview.imgUrl,
-        },
-      };
+      return { userReviews };
     } catch (error: any) {
       throw new Error(`Falha ao criar os reviews: ${error.message}`);
     }
@@ -39,14 +33,8 @@ export class UserReviewsServiceImplementation implements UserReviewsService {
   async list(): Promise<ListUserReviewsOutputDto> {
     try {
       const userReviews = await this.repository.list();
-
-      return {
-        userReviews: userReviews.map((userReview) => ({
-          id: userReview.id,
-          name: userReview.name,
-          imgUrl: userReview.imgUrl,
-        })),
-      };
+      
+      return { userReviews };
     } catch (error: any) {
       throw new Error(`Falha ao listar os reviews: ${error.message}`);
     }
