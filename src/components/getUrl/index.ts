@@ -1,7 +1,7 @@
-import puppeteer, { Page } from "puppeteer";
+import puppeteer from "puppeteer";
 
 export async function getUrl(urlPage: string) {
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
   let links: string[] = [];
 
@@ -15,7 +15,17 @@ export async function getUrl(urlPage: string) {
     }
   });
 
-  const nameBusiness = await page.$eval("h1", (item) => item.textContent);
+  const title = await page.$eval("h1", (item) => item.textContent);
+  interface CustomWindow extends Window {
+    APP_INITIALIZATION_STATE?: string; // ou o tipo apropriado da propriedade
+}
+
+const appInitializationState = await page.evaluate(()=>{
+  const customWindow = window as CustomWindow;
+  let appState: any = customWindow.APP_INITIALIZATION_STATE;
+
+  return appState
+})
   await page.waitForNavigation();
   await page.click("[jslog^='145620']");
   await page.waitForNavigation();
@@ -45,11 +55,20 @@ export async function getUrl(urlPage: string) {
       selectItem = links[0];
     }
   }
+
   await page.close();
 
+  console.log({
+    id: appInitializationState[5][3][2][0],
+    title,
+    url: urlPage,
+    link: selectItem,
+  }
+  )
+
   return {
-    id: "123333",
-    nameBusiness,
+    id: appInitializationState[5][3][2][0],
+    nameBusiness: title,
     addressMap: urlPage,
     addressReview: selectItem,
   };
