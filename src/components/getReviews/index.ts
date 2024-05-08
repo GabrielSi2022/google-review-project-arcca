@@ -2,8 +2,7 @@ import axios from "axios";
 import { Reviews } from "../../entities/reviews";
 import { Business } from "../../entities/business";
 
-async function fetchReviews(storeIdentifier: number): Promise<any[]> {
-  const query = findQueryByStoreIdentifier(storeIdentifier);
+async function fetchReviews(url: string): Promise<any[]> {
   let paginationToken: any = null;
   let responsesList: any[] = [];
   let response: any;
@@ -11,7 +10,7 @@ async function fetchReviews(storeIdentifier: number): Promise<any[]> {
   const reviews: any[] = [];
 
   do {
-    const paginatedQuery = insertTokenIntoQuery(query, paginationToken);
+    const paginatedQuery = insertTokenIntoQuery(url, paginationToken);
     try {
       response = await axios.get(paginatedQuery);
       structuredResponse = parseResponse(response.data);
@@ -71,32 +70,26 @@ async function getBusiness() {
   try {
     const response = await axios.get("http://localhost:3000/business");
 
-    const urls = response.data.business.map(
-      (business: Business) => business.addressReview
-    );
+    const urls = response.data.business.map((business: Business) => {
+      return {
+        id: business.id,
+        url: business.addressReview,
+      };
+    });
 
-    console.log(urls);
+    return urls;
   } catch (error) {
     console.error("Erro ao listar as empresas:", error);
   }
 }
 
-function findQueryByStoreIdentifier(storeIdentifier: number): string {
-  const storeUrls: Record<number, string> = {
-    0: "https://www.google.com.br/maps/rpc/listugcposts?authuser=0&hl=pt-BR&gl=br&pb=!1m8!1s0x94b64399cc827d1d%3A0xcfd43c9cb0e9088c!3s!6m4!4m1!1e1!4m1!1e3!9b0!2m2!1i10!2sCAESdkNBRVFGQnBTUTJkblNVRm9TVUZIUVVWcFFVRnZlRU5CUlZOTFVXOUxRVVF0WDNremIxbEpabDlmWDNoSlVVMURjbU5GU0RVMU9EWkhlbU5JVDFkQlFVRkJRVUp2U2w5bGRWRkJiMWxGYmxOMWFVZEJRV2xCUVE%3D!5m2!1soMA4ZryrBdHe1sQPiJ6PiA0!7e81!8m5!1b1!2b1!3b1!5b1!7b1!11m6!1e3!2e1!3spt-BR!4sbr!6m1!1i2!13m1!1e1",
-    1: "https://www.google.com/maps/rpc/listugcposts?authuser=0&hl=en&gl=br&pb=!1m7!1s0x9bd5b81cec9b05%3A0xc9b595f28b3ca216!3s!6m4!4m1!1e1!4m1!1e3!2m2!1i10!2s!5m2!1snLfvZYyyCoHS1sQPxZSTiAw!7e81!8m5!1b1!2b1!3b1!5b1!7b1!11m6!1e3!2e1!3sen!4sbr!6m1!1i2!13m1!1e2",
-  };
-
-  return storeUrls[storeIdentifier] || "";
-}
-
-async function postReviews(reviews: Reviews) {
+async function postReviews(reviews: Reviews, businessId: string) {
   try {
     // Faz uma solicitação POST para enviar as revisões coletadas para o servidor
-    const response = await axios.post(
-      "http://localhost:3000/reviews/create",
-      reviews
-    );
+    const response = await axios.post("http://localhost:3000/reviews/create", {
+      ...reviews,
+      businessId,
+    });
     console.log("Resposta do servidor:", response.data);
   } catch (error) {
     console.error("Erro ao enviar revisões para o servidor:", error);
@@ -104,12 +97,14 @@ async function postReviews(reviews: Reviews) {
 }
 
 async function main() {
-  const storeIdentifier = 1; // Número da loja desejada
-  const reviews = await fetchReviews(storeIdentifier);
+  const business = await getBusiness();
+  await business.map(async (item: any) => {
+    const reviewsUrl = await fetchReviews(item.url);
 
-  // console.log(reviews);
-
-  await getBusiness();
+    for (const review of reviewsUrl) {
+      await postReviews(review, item.id);
+    }
+  });
 }
 
 main();

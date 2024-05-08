@@ -37,7 +37,7 @@ export class Business {
   ) {
     return new Business({
       nameBusiness,
-      id: nameBusiness,
+      id,
       addressMap,
       addressReview,
       createdAt,
