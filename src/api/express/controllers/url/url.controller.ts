@@ -1,20 +1,25 @@
-// import { Request, Response } from "express";
+import axios from "axios";
+import { Request, Response } from "express";
+import { getUrl } from "../../../../components/getUrl";
 
-// export class UrlController {
-//   private constructor() {}
+export class UrlController {
+  private constructor() {}
 
-//   public static build() {
-//     return new UrlController();
-//   }
+  public static build() {
+    return new UrlController();
+  }
 
-//   public async create(req: Request, res: Response) {
-//     const { url } = req.body;
+  public async create(req: Request, res: Response) {
+    const { url } = req.body;
 
-//     const output = await getUrl();
+    const response = await getUrl(url);
 
-//     const responseData = {
-//       url,
-//     };
-//     res.status(201).json(responseData);
-//   }
-// }
+    await axios.post("http://localhost:3000/business/create", response);
+
+    const responseData = {
+      response,
+    };
+
+    res.status(201).json(responseData);
+  }
+}

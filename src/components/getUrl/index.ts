@@ -1,6 +1,6 @@
 import puppeteer, { Page } from "puppeteer";
 
-async function getUrl(urlPage: string) {
+export async function getUrl(urlPage: string) {
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
   let links: string[] = [];
@@ -15,7 +15,7 @@ async function getUrl(urlPage: string) {
     }
   });
 
-  const title = await page.$eval("h1", (item) => item.textContent);
+  const nameBusiness = await page.$eval("h1", (item) => item.textContent);
   await page.waitForNavigation();
   await page.click("[jslog^='145620']");
   await page.waitForNavigation();
@@ -49,12 +49,8 @@ async function getUrl(urlPage: string) {
 
   return {
     id: "123333",
-    title,
-    url: urlPage,
-    link: selectItem,
+    nameBusiness,
+    addressMap: urlPage,
+    addressReview: selectItem,
   };
 }
-const urlPage =
-  "https://www.google.com/maps/place/Nema+-+Visconde+de+Piraj%C3%A1+%7C+Padaria+de+Fermenta%C3%A7%C3%A3o+Natural/@-22.9841517,-43.2154292,17z/data=!3m2!4b1!5s0x9bd50757e02857:0x35aa6a9b37f5d532!4m6!3m5!1s0x9bd58a0cdc1487:0x4c1eb56d62eb469b!8m2!3d-22.9841517!4d-43.2128543!16s%2Fg%2F11j20tdp78?entry=ttu";
-
-getUrl(urlPage);

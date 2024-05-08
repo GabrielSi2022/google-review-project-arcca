@@ -74,6 +74,7 @@ async function getBusiness() {
     const urls = response.data.business.map(
       (business: Business) => business.addressReview
     );
+
     console.log(urls);
   } catch (error) {
     console.error("Erro ao listar as empresas:", error);
@@ -107,9 +108,6 @@ async function main() {
   const reviews = await fetchReviews(storeIdentifier);
 
   // console.log(reviews);
-  // for (const review of reviews) {
-  //   await postReviews(review);
-  // }
 
   await getBusiness();
 }
