@@ -1,6 +1,8 @@
 import axios from "axios";
 import { Reviews } from "../../entities/reviews";
 import { Business } from "../../entities/business";
+import { ListOutputDtoBusiness } from "../../services/business/business.service";
+import { CreateOutputDtoReviews } from "../../services/reviews/reviews.service";
 
 async function fetchReviews(url: string): Promise<any[]> {
   let paginationToken: any = null;
@@ -68,12 +70,18 @@ function parseResponse(jsonString: string): any[] {
 
 async function getBusiness() {
   try {
-    const response = await axios.get("http://localhost:3000/business");
+    const {
+      data,
+    }: {
+      data: { business: { props: { id: string; addressReview: string } }[] };
+    } = await axios.get("http://localhost:3000/business");
 
-    const urls = response.data.business.map((business: Business) => {
+    const { business } = data;
+
+    const urls = business.map(({ props }) => {
       return {
-        id: business.id,
-        url: business.addressReview,
+        id: props.id,
+        url: props.addressReview,
       };
     });
 
@@ -83,28 +91,38 @@ async function getBusiness() {
   }
 }
 
-async function postReviews(reviews: Reviews, businessId: string) {
+async function postReviews(reviewsItens: Reviews, businessId: string) {
   try {
     // Faz uma solicitação POST para enviar as revisões coletadas para o servidor
-    const response = await axios.post("http://localhost:3000/reviews/create", {
-      ...reviews,
+    const { data } = await axios.post("http://localhost:3000/reviews/create", {
+      ...reviewsItens,
       businessId,
     });
-    console.log("Resposta do servidor:", response.data);
+
+    const { reviews } = data as CreateOutputDtoReviews;
+
+    return reviews;
   } catch (error) {
     console.error("Erro ao enviar revisões para o servidor:", error);
   }
 }
 
-async function main() {
-  const business = await getBusiness();
-  await business.map(async (item: any) => {
-    const reviewsUrl = await fetchReviews(item.url);
+export async function getReviews() {
+  const businessUrls = await getBusiness();
 
-    for (const review of reviewsUrl) {
-      await postReviews(review, item.id);
-    }
-  });
+  let total = 0;
+
+  if (businessUrls) {
+    await Promise.all(
+      businessUrls.map(async (item) => {
+        const reviewsUrl = await fetchReviews(item.url);
+        for (const review of reviewsUrl) {
+          await postReviews(review, item.id);
+          total++;
+        }
+      })
+    );
+  }
+
+  return { total };
 }
-
-main();
