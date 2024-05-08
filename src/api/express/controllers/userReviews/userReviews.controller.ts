@@ -16,19 +16,17 @@ export class UserReviewsController {
     const repository = UserReviewsRepositoryPrisma.build(prisma);
     const service = UserReviewsServiceImplementation.build(repository);
 
-    const output = await service.create(id, name, imgUrl);
+    const { userReviews } = await service.create(id, name, imgUrl);
 
-    const responseData = { id, name, imgUrl };
-    res.status(201).json(responseData);
+    res.status(201).json({...userReviews});
   }
 
   public async list(req: Request, res: Response) {
     const repository = UserReviewsRepositoryPrisma.build(prisma);
     const service = UserReviewsServiceImplementation.build(repository);
 
-    const output = await service.list();
+    const { userReviews } = await service.list();
 
-    const responseData = { userReviews: output.userReviews };
-    res.status(200).json(responseData);
+    res.status(200).json({ userReviews });
   }
 }
