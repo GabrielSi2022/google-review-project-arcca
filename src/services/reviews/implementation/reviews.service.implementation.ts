@@ -13,45 +13,29 @@ export class ReviewsServiceImplementation implements ReviewsService {
     return new ReviewsServiceImplementation(repository);
   }
 
+
   async create(
     classification: number,
-    date: Date,
     text: string,
     answer: string,
-    createdAt: Date,
-    updatedAt: Date,
     userId: string,
     reviewsId: string,
     businessId: string
   ): Promise<CreateOutputDtoReviews> {
     try {
-      const review = Reviews.create(
+
+      const reviews = Reviews.create(
         classification,
-        date,
         text || "",
         answer || "",
-        createdAt || new Date(),
-        updatedAt || new Date(),
         userId,
         reviewsId,
         businessId
       );
 
-      await this.repository.save(review);
-
-      return {
-        reviews: {
-          classification: review.classification,
-          date: review.date,
-          text: review.text,
-          answer: review.answer,
-          createdAt: review.createdAt,
-          updatedAt: review.updatedAt,
-          userId: review.userId,
-          reviewsId: review.reviewsId,
-          businessId: review.businessId,
-        },
-      };
+      await this.repository.save(reviews);
+      
+      return { reviews };
     } catch (error: any) {
       throw new Error(`Falha ao criar o review: ${error.message}`);
     }
@@ -61,21 +45,8 @@ export class ReviewsServiceImplementation implements ReviewsService {
     try {
       const reviews = await this.repository.list();
 
-      const output: ListOutputDtoReviews = {
-        reviews: reviews.map((review) => ({
-          classification: review.classification,
-          date: review.date,
-          text: review.text,
-          answer: review.answer,
-          createdAt: review.createdAt,
-          updatedAt: review.updatedAt,
-          userId: review.userId,
-          reviewsId: review.reviewsId,
-          businessId: review.businessId,
-        })),
-      };
+      return { reviews };
 
-      return output;
     } catch (error: any) {
       throw new Error(`Falha ao listar os reviews: ${error.message}`);
     }
