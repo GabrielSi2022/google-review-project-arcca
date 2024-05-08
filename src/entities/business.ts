@@ -2,9 +2,7 @@ export type BusinessProps = {
   nameBusiness: string;
   id: string;
   addressMap: string;
-  addressReview: string;
-  createdAt: Date;
-  updatedAt: Date;
+  addressReview: string
 };
 
 export class Business {
@@ -13,17 +11,13 @@ export class Business {
     nameBusiness: string,
     id: string,
     addressMap: string,
-    addressReview: string,
-    createdAt: Date,
-    updatedAt: Date
+    addressReview: string
   ) {
     return new Business({
       nameBusiness,
       id,
       addressMap,
-      addressReview,
-      createdAt,
-      updatedAt,
+      addressReview
     });
   }
 
@@ -31,17 +25,13 @@ export class Business {
     nameBusiness: string,
     id: string,
     addressMap: string,
-    addressReview: string,
-    createdAt: Date,
-    updatedAt: Date
+    addressReview: string
   ) {
     return new Business({
       nameBusiness,
       id,
       addressMap,
-      addressReview,
-      createdAt,
-      updatedAt,
+      addressReview
     });
   }
 
@@ -59,13 +49,5 @@ export class Business {
 
   public get addressReview() {
     return this.props.addressReview;
-  }
-
-  public get createdAt() {
-    return this.props.createdAt;
-  }
-
-  public get updatedAt() {
-    return this.props.updatedAt;
   }
 }
